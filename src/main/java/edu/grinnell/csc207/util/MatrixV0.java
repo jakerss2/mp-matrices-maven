@@ -235,7 +235,7 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the column is negative or greater than the width.
    */
   public void insertCol(int col) {
-    if (this.height < col || col < 0) {
+    if (this.width < col || col < 0) {
       throw new IndexOutOfBoundsException();
     }
 
@@ -247,7 +247,7 @@ public class MatrixV0<T> implements Matrix<T> {
       }
     }
 
-    for (int i = 0; i < this.width; i++) {
+    for (int i = 0; i < this.height; i++) {
       String coord = MatrixV0.makeCoord(col, i);
       try {
         this.matrix.set(coord, this.defVal);
@@ -271,9 +271,9 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the size of vals is not the same as the height of the matrix.
    */
   public void insertCol(int col, T[] vals) throws ArraySizeException {
-    if (this.height < col || col < 0) {
+    if (this.width < col || col < 0) {
       throw new IndexOutOfBoundsException();
-    } else if (vals.length != this.width) {
+    } else if (vals.length != this.height) {
       throw new ArraySizeException();
     }
 
@@ -285,7 +285,7 @@ public class MatrixV0<T> implements Matrix<T> {
       }
     }
 
-    for (int i = 0; i < this.width; i++) {
+    for (int i = 0; i < this.height; i++) {
       String coord = makeCoord(col, i);
       try {
         this.matrix.set(coord, vals[i]);
@@ -335,17 +335,17 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the column is negative or greater than or equal to the width.
    */
   public void deleteCol(int col) {
-    if (this.height <= col || col < 0) {
+    if (this.width <= col || col < 0) {
       throw new IndexOutOfBoundsException();
     }
 
     for (int i = col; i < this.width - 1; i++) {
       for (int j = 0; j < this.height; j++) {
-        this.set(i, j, this.get(i + 1, j));
+        this.set(j, i, this.get(j, i + 1));
       }
     }
 
-    for (int i = 0; i < this.width; i++) {
+    for (int i = 0; i < this.height; i++) {
       String coord = MatrixV0.makeCoord(this.width - 1, i);
       try {
         this.matrix.remove(coord);
@@ -375,15 +375,15 @@ public class MatrixV0<T> implements Matrix<T> {
    */
   public void fillRegion(int startRow, int startCol, int endRow, int endCol,
       T val) {
-        if (this.height <= endRow || endRow < 0 || this.width <= endCol || endCol < 0) {
+        if (this.height < endRow || endRow < startRow || this.width < endCol 
+            || endCol < startCol || startRow < 0 || startCol < 0) {
           throw new IndexOutOfBoundsException();
         } // if
 
         for (int i = startRow; i < endRow; i++) {
-          for (int j = startCol; j < endCol; i++) {
-            String coord = makeCoord(i, j);
+          for (int j = startCol; j < endCol; j++) {
             try {
-              this.matrix.set(coord, val);
+              this.set(i, j, val);
             } catch (Exception e) {
               System.err.println("Error Setting!");
             } // catch
@@ -414,27 +414,25 @@ public class MatrixV0<T> implements Matrix<T> {
    */
   public void fillLine(int startRow, int startCol, int deltaRow, int deltaCol,
       int endRow, int endCol, T val) {
-        if (this.height <= endRow || endRow < 0 || this.width <= endCol || endCol < 0) {
+        if (this.height < endRow || endRow < startRow || this.width < endCol 
+            || endCol < startCol || startRow < 0 || startCol < 0) {
           throw new IndexOutOfBoundsException();
         } // if
 
         if ((startRow + deltaRow) >= endRow || (startCol + deltaCol) >= endCol) {
-          String coord = makeCoord(startRow, startCol);
             try {
-              this.matrix.set(coord, val);
+              this.set(startRow, startCol, val);
             } catch (Exception e) {
               System.err.println("Error Setting!");
             } // catch
         } else {
-          String coord = makeCoord(startRow, startCol);
           try {
-            this.matrix.set(coord, val);
+            this.set(startRow, startCol, val);
             fillLine(startRow + deltaRow, startCol + deltaCol, deltaRow, deltaCol, endRow, endCol, val);
           } catch (Exception e) {
             System.err.println("Error Setting!");
           } // catch
         }
-    
   } // fillLine(int, int, int, int, int, int, T)
 
   /**
@@ -465,7 +463,11 @@ public class MatrixV0<T> implements Matrix<T> {
    * height, and equal elements; false otherwise.
    */
   public boolean equals(Object other) {
-    if ((!(this == other)) || (!(other instanceof MatrixV0))) {
+    if (this == other) {
+      return true;
+    }
+
+    if (!(other instanceof MatrixV0)) {
       return false;
     }
 
@@ -474,11 +476,12 @@ public class MatrixV0<T> implements Matrix<T> {
     if (this.width != theOtherMatrix.width || this.height != theOtherMatrix.height) {
       return false;
     }
+
     for (int i = 0; i < this.width(); i++) {
-      for (int j = 0; i < this.height(); j++) {
+      for (int j = 0; j < this.height(); j++) {
         String coord = makeCoord(i, j);
         try {
-          if (this.matrix.get(coord) != theOtherMatrix.matrix.get(coord)) {
+          if (!(this.get(j, i).equals(theOtherMatrix.get(j, i)))) {
             return false;
           }
         } catch (Exception e) {
