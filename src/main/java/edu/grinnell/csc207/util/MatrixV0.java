@@ -166,9 +166,17 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the row is negative or greater than the height.
    */
   public void insertRow(int row) {
-    if (this.height <= row || row < 0) {
+    if (this.height < row || row < 0) {
       throw new IndexOutOfBoundsException();
     } // if
+
+    this.height++;
+
+    for (int i = this.height - 1; i > row; i--) {
+      for (int j = 0; j < this.width; j++) {
+        this.set(i, j, this.get(i - 1, j));
+      }
+    }
 
     for (int i = 0; i < this.width; i++) {
       String coord = MatrixV0.makeCoord(i, row);
@@ -178,7 +186,6 @@ public class MatrixV0<T> implements Matrix<T> {
         System.err.print("Error setting");
       } // try/catch
     } // for
-    this.height++;
   } // insertRow(int)
 
   /**
@@ -195,15 +202,17 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the size of vals is not the same as the width of the matrix.
    */
   public void insertRow(int row, T[] vals) throws ArraySizeException {
-    if (this.height <= row || row < 0) {
+    if (this.height < row || row < 0) {
       throw new IndexOutOfBoundsException();
     } else if (vals.length != this.width) {
       throw new ArraySizeException();
     } // else if
 
-    for (int i = row; i < this.height; i++) {
+    this.height++;
+
+    for (int i = this.height - 1; i > row; i--) {
       for (int j = 0; j < this.width; j++) {
-        this.set(i + 1, j, this.get(i, j));
+        this.set(i, j, this.get(i - 1, j));
       }
     }
 
@@ -214,7 +223,6 @@ public class MatrixV0<T> implements Matrix<T> {
       } catch (Exception e) {
       } // try/catch
     } // for
-    this.height++;
   } // insertRow(int, T[])
 
   /**
@@ -227,8 +235,16 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the column is negative or greater than the width.
    */
   public void insertCol(int col) {
-    if (this.height <= col || col < 0) {
+    if (this.height < col || col < 0) {
       throw new IndexOutOfBoundsException();
+    }
+
+    this.width++;
+
+    for (int i = this.width - 1; i > col; i--) {
+      for (int j = 0; j < this.height; j++) {
+        this.set(j, i, this.get(j, i - 1));
+      }
     }
 
     for (int i = 0; i < this.width; i++) {
@@ -239,7 +255,6 @@ public class MatrixV0<T> implements Matrix<T> {
         System.err.print("Error setting");
       }
     }
-    this.width++;
   } // insertCol(int)
 
   /**
@@ -256,10 +271,18 @@ public class MatrixV0<T> implements Matrix<T> {
    *   If the size of vals is not the same as the height of the matrix.
    */
   public void insertCol(int col, T[] vals) throws ArraySizeException {
-    if (this.height <= col || col < 0) {
+    if (this.height < col || col < 0) {
       throw new IndexOutOfBoundsException();
     } else if (vals.length != this.width) {
       throw new ArraySizeException();
+    }
+
+    this.width++;
+
+    for (int i = this.width - 1; i > col; i--) {
+      for (int j = 0; j < this.height; j++) {
+        this.set(j, i, this.get(j, i - 1));
+      }
     }
 
     for (int i = 0; i < this.width; i++) {
@@ -269,7 +292,6 @@ public class MatrixV0<T> implements Matrix<T> {
       } catch (Exception e) {
       }
     }
-    this.width++;
   } // insertCol(int, T[])
 
   /**
