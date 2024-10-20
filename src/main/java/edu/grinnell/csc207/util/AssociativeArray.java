@@ -89,18 +89,18 @@ public class AssociativeArray<K, V> {
         arrString += this.pairs[i].toString() + ", ";
       } catch (Exception e) {
         arrString += this.pairs[i].key.toString() + ": Null" + ", ";
-      }
+      } // try/catch
     } // for
     try {
       arrString += this.pairs[this.size - 1].toString() + "}";
     } catch (Exception e) {
       arrString += this.pairs[this.size - 1].key.toString() + ": Null" + "}";
-    }
+    } // try/catch
     return arrString;
   } // toString()
 
   /**
-   * Get all of the keys in the AssociativeArray
+   * Get all of the keys in the AssociativeArray.
    *
    * @return all of the keys
    */
@@ -111,8 +111,8 @@ public class AssociativeArray<K, V> {
         arrString[i] = (String) this.pairs[i].key;
       } catch (Exception e) {
         System.err.print("Somehow added a null");
-      }
-    }
+      } // try/catch
+    } //for
     return arrString;
   } // toString()
 
