@@ -18,13 +18,13 @@ public class MatrixV0<T> implements Matrix<T> {
   AssociativeArray<String, T> matrix = new AssociativeArray<>();
 
   /** The width of the matrix. */
-  private int width;
+  int width;
 
   /** The height of the matrix. */
-  private int height;
+  int height;
 
   /** Default value for our matrix. */
-  private T defVal;
+  T defVal;
 
   // +--------------+------------------------------------------------
   // | Constructors |
@@ -44,7 +44,7 @@ public class MatrixV0<T> implements Matrix<T> {
    * @throws NegativeArraySizeException
    *   If either the width or height are negative.
    */
-  public MatrixV0(int wid, int hei, T def) {
+  public MatrixV0(int width, int height, T def) {
     // this isn't efficient but it gets the job done! :)
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
@@ -56,8 +56,8 @@ public class MatrixV0<T> implements Matrix<T> {
         } // try/catch
       } // for
     } // for
-    this.width = wid;
-    this.height = hei;
+    this.width = width;
+    this.height = height;
     this.defVal = def;
   } // MatrixV0(int, int, T)
 
