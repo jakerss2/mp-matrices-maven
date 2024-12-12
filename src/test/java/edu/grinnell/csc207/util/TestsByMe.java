@@ -9,6 +9,7 @@ public class TestsByMe {
   
   /**
    * Testing the set method
+   * @author Jake Bell
    */
   @Test
   void testSet() {
