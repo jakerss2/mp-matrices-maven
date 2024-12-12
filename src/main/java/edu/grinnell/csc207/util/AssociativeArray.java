@@ -10,7 +10,7 @@ import static java.lang.reflect.Array.newInstance;
  * @param <K> the key type
  * @param <V> the value type
  *
- * @author Your Name Here
+ * @author Jacob Bell
  * @author Samuel A. Rebelsky
  */
 public class AssociativeArray<K, V> {
@@ -87,13 +87,13 @@ public class AssociativeArray<K, V> {
     for (int i = 0; i < this.size - 1; i++) {
       try {
         arrString += this.pairs[i].toString() + ", ";
-      } catch (Exception e) {
+      } catch (NullPointerException e) {
         arrString += this.pairs[i].key.toString() + ": Null" + ", ";
       } // try/catch
     } // for
     try {
       arrString += this.pairs[this.size - 1].toString() + "}";
-    } catch (Exception e) {
+    } catch (NullPointerException e) {
       arrString += this.pairs[this.size - 1].key.toString() + ": Null" + "}";
     } // try/catch
     return arrString;

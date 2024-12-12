@@ -34,9 +34,9 @@ public class MatrixV0<T> implements Matrix<T> {
    * Create a new matrix of the specified width and height with the
    * given value as the default.
    *
-   * @param wid
+   * @param width
    *   The width of the matrix.
-   * @param hei
+   * @param height
    *   The height of the matrix.
    * @param def
    *   The default value, used to fill all the cells.
